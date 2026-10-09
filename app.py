@@ -2,7 +2,7 @@ import random
 
 import streamlit as st
 
-from logic_utils import (
+from logic_utils import (  # FIX: Refactored shared logic into logic_utils.py using agent mode
     check_guess,
     get_range_for_difficulty,
     parse_guess,
@@ -35,9 +35,11 @@ st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
 if "secret" not in st.session_state:
+    # FIX: Kept the secret tied to the active difficulty range instead of resetting unpredictably, using agent mode.
     st.session_state.secret = random.randint(low, high)
 
 if "attempts" not in st.session_state:
+    # FIX: Reset the attempt counter correctly at the start of a game so the flow matches the game rules, using agent mode.
     st.session_state.attempts = 0
 
 if "score" not in st.session_state:
@@ -52,7 +54,7 @@ if "history" not in st.session_state:
 st.subheader("Make a guess")
 
 st.info(
-    f"Guess a number between 1 and 100. "
+    f"Guess a number between {low} and {high}. "
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
 )
 
@@ -63,20 +65,23 @@ with st.expander("Developer Debug Info"):
     st.write("Difficulty:", difficulty)
     st.write("History:", st.session_state.history)
 
-raw_guess = st.text_input(
-    "Enter your guess:",
-    key=f"guess_input_{difficulty}"
-)
+with st.form(key="guess_form", clear_on_submit=False):
+    # FIX: Wrapped the input in a Streamlit form so Enter triggers submission instead of clearing the field, using agent mode.
+    raw_guess = st.text_input(
+        "Enter your guess:",
+        key=f"guess_input_{difficulty}"
+    )
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    submit = st.button("Submit Guess 🚀")
-with col2:
-    new_game = st.button("New Game 🔁")
-with col3:
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        submit = st.form_submit_button("Submit Guess 🚀")
+    with col2:
+        new_game = st.form_submit_button("New Game 🔁")
+
     show_hint = st.checkbox("Show hint", value=True)
 
 if new_game:
+    # FIX: Reset the game state cleanly for a new round while preserving the selected difficulty range, using agent mode.
     st.session_state.attempts = 0
     st.session_state.status = "playing"
     st.session_state.secret = random.randint(low, high)
