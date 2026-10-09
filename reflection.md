@@ -14,9 +14,10 @@ Document at least 3 bugs you found. Add rows as needed.
 
 | Input | Expected Behavior | Actual Behavior | Console Output / Error |
 |-------|-------------------|-----------------|------------------------|
-| | | | |
-| | | | |
-| | | | |
+|15     | HIGHER Hint       | LOWER Hint      | None                   |
+|Enter  | Submits guess     | Does nothing    | None                   |
+|NewGame| Creates a new game| New game, ends  | None                   |
+|85     | LOWER HINT        | HIGHER Hint     | None
 
 ---
 
